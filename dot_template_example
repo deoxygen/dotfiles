@@ -1,0 +1,38 @@
+# This is an example template file for chezmoi
+# It demonstrates various template features
+
+# Basic information from your config
+Name: {{ .name }}
+Email: {{ .email }}
+
+# OS-specific configurations
+{{ if eq .chezmoi.os "darwin" -}}
+# macOS specific settings
+alias ls='ls -G'
+export PATH=$HOME/Library/Python/3.9/bin:$PATH
+{{- else if eq .chezmoi.os "linux" -}}
+# Linux specific settings
+alias ls='ls --color=auto'
+export PATH=$HOME/.local/bin:$PATH
+{{- else if eq .chezmoi.os "windows" -}}
+# Windows specific settings
+alias ls='ls --color=auto'
+{{- end }}
+
+# Hostname-specific configurations
+{{ if eq .chezmoi.hostname "work-laptop" -}}
+# Work-specific settings
+export http_proxy=http://proxy.work.com:8080
+{{- else -}}
+# Personal settings
+# No proxy needed
+{{- end }}
+
+# Executable commands
+Current date: {{ output "date" }}
+
+# You can also include other files
+# {{ include "/path/to/file" }}
+
+# This is how you can use encrypted secrets (requires proper setup)
+# DB_PASSWORD={{ (onepassword "Database").password }}
